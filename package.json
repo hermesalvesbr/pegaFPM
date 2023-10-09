@@ -1,0 +1,24 @@
+{
+  "name": "fiverr_scrape",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.8.2",
+    "async": "^3.2.4",
+    "axios": "^1.5.1",
+    "csv-parser": "^3.0.0",
+    "fs": "^0.0.1-security",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@cyclonedx/bom": "^4.0.3",
+    "@types/async": "^3.2.21"
+  }
+}
