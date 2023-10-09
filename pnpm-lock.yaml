@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@types/node':
-    specifier: ^20.8.2
+    specifier: ^20.8.3
     version: 20.8.3
   async:
     specifier: ^3.2.4
@@ -18,7 +18,7 @@ dependencies:
     specifier: ^3.0.0
     version: 3.0.0
   fs:
-    specifier: ^0.0.1-security
+    specifier: 0.0.1-security
     version: 0.0.1-security
   typescript:
     specifier: ^5.2.2
