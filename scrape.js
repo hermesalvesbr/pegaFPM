@@ -38,18 +38,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
 var async = require("async");
-var csv = require('csv-parser');
-var CSV_URL = 'https://www.tesourotransparente.gov.br/ckan/dataset/af4e7c47-2132-4d9a-bd7c-34e28a210b03/resource/ad282bd0-9043-4c5d-b6d0-f586576c0bd4/download/TransferenciaMensalMunicipios202302.csv';
-var DIRECTUS_API_ENDPOINT = 'https://cms.softagon.app/items/transferencias_constitucionais';
-var BEARER_TOKEN = 'C-0yMQwGn469SwY4oN1RZEdSZOI_LT9Y';
+var csv = require("csv-parser");
+var previousSize = null;
+function checkForNewFile(url) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, newSize;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, axios_1.default.head(url)];
+                case 1:
+                    response = _a.sent();
+                    newSize = parseInt(response.headers['content-length']);
+                    if (previousSize !== null && newSize !== previousSize) {
+                        previousSize = newSize;
+                        return [2 /*return*/, true];
+                    }
+                    previousSize = newSize;
+                    return [2 /*return*/, false];
+            }
+        });
+    });
+}
+var CSV_URL = "https://www.tesourotransparente.gov.br/ckan/dataset/af4e7c47-2132-4d9a-bd7c-34e28a210b03/resource/ad282bd0-9043-4c5d-b6d0-f586576c0bd4/download/TransferenciaMensalMunicipios202302.csv";
+var DIRECTUS_API_ENDPOINT = "https://cms.softagon.app/items/transferencias_constitucionais";
+var BEARER_TOKEN = "C-0yMQwGn469SwY4oN1RZEdSZOI_LT9Y";
 var TIMEOUT = 10000; // 10 seconds
 var MAX_RETRIES = 3;
 var config = {
     headers: {
-        'Authorization': "Bearer ".concat(BEARER_TOKEN),
-        'Content-Type': 'application/json',
+        Authorization: "Bearer ".concat(BEARER_TOKEN),
+        "Content-Type": "application/json",
     },
-    timeout: TIMEOUT
+    timeout: TIMEOUT,
 };
 function uploadToDirectus(data) {
     return __awaiter(this, void 0, void 0, function () {
@@ -84,7 +104,7 @@ function uploadWithRetry(data, retries) {
                     _a.sent();
                     return [3 /*break*/, 5];
                 case 4:
-                    console.error('Max retries reached. Failed to upload:', data, error_1);
+                    console.error("Max retries reached. Failed to upload:", data, error_1);
                     _a.label = 5;
                 case 5: return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
@@ -100,31 +120,42 @@ var q = async.queue(function (task, callback) {
 }, 2);
 // Assign a callback
 q.drain(function () {
-    console.log('All items have been processed');
+    console.log("All items have been processed");
 });
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var response;
+        var isNewFile, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1.default.get(CSV_URL, { responseType: 'stream' })];
+                case 0: return [4 /*yield*/, checkForNewFile(CSV_URL)];
                 case 1:
+                    isNewFile = _a.sent();
+                    if (!isNewFile) {
+                        console.log('No new file found. Proceeding with the existing file.');
+                    }
+                    return [4 /*yield*/, axios_1.default.get(CSV_URL, { responseType: "stream" })];
+                case 2:
                     response = _a.sent();
                     response.data
                         .pipe(csv())
-                        .on('data', function (row) {
-                        // Add data to queue
+                        .on('headers', function (headers) {
+                        console.log("First header: ".concat(headers[0]));
+                        for (var i = 0; i < headers.length; i++) {
+                            console.log("Header[".concat(i, "]: ").concat(headers[i]));
+                        }
+                    })
+                        .on("data", function (row) {
                         q.push({ data: row }, function (result) {
                             if (result instanceof Error) {
-                                console.error('Failed to upload:', row, result);
+                                console.error("Failed to upload:", row, result);
                             }
                             else {
-                                console.log('Uploaded:', row);
+                                console.log("Uploaded:", row);
                             }
                         });
                     })
-                        .on('end', function () {
-                        console.log('CSV data successfully processed.');
+                        .on("end", function () {
+                        console.log("CSV data successfully processed.");
                     });
                     return [2 /*return*/];
             }
