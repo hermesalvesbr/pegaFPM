@@ -1,11 +1,10 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "strict": true,
-      "esModuleInterop": true
-    },
-    "include": ["*.ts"],
-    "exclude": ["node_modules"]
-  }
-  
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": ["*.ts", "src/scrape.ts", "src/scrape.ts", "src/puppeter.ts", "src/puppeter.ts"],
+  "exclude": ["node_modules"]
+}

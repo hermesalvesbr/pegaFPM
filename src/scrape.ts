@@ -1,13 +1,13 @@
 import axios from "axios";
 import * as async from "async";
-
+import 'dotenv/config'
 import csv from "csv-parser";
 
 const CSV_URL =
   "https://www.tesourotransparente.gov.br/ckan/dataset/af4e7c47-2132-4d9a-bd7c-34e28a210b03/resource/ad282bd0-9043-4c5d-b6d0-f586576c0bd4/download/TransferenciaMensalMunicipios202302.csv";
 const DIRECTUS_API_ENDPOINT =
   "https://cms.softagon.app/items/transferencias_constitucionais";
-const BEARER_TOKEN = "C-0yMQwGn469SwY4oN1RZEdSZOI_LT9Y";
+const BEARER_TOKEN = process.env.DIRECTUS_TOKEN
 const TIMEOUT = 10000; // 10 seconds
 const MAX_RETRIES = 3;
 
