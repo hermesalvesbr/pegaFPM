@@ -1,9 +1,7 @@
 import axios from "axios";
 import * as async from "async";
-<<<<<<< HEAD:src/scrape.ts
 import 'dotenv/config'
 import csv from "csv-parser";
-=======
 
 import csv = require("csv-parser");
 
@@ -21,7 +19,6 @@ async function checkForNewFile(url: string): Promise<boolean> {
   previousSize = newSize;
   return false;
 }
->>>>>>> d3c27876006c09e4a126799e32f72aeded77349f:scrape.ts
 
 const CSV_URL =
   "https://www.tesourotransparente.gov.br/ckan/dataset/af4e7c47-2132-4d9a-bd7c-34e28a210b03/resource/ad282bd0-9043-4c5d-b6d0-f586576c0bd4/download/TransferenciaMensalMunicipios202302.csv";
