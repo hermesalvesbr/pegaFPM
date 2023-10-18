@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^20.8.6",
+    "@types/node": "^20.8.7",
     "async": "^3.2.4",
     "axios": "^1.5.1",
     "csv-parser": "^3.0.0",
@@ -24,50 +24,16 @@
     "@cyclonedx/bom": "^4.0.3",
     "@directus/sdk": "^12.0.1",
     "@directus/types": "^10.1.6",
-    "@types/async": "^3.2.21",
+    "@types/async": "^3.2.22",
     "@types/node": "^20.4.8",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
-    "tsx": "^3.13.0",
+    "tsx": "^3.14.0",
     "typescript": "^5.1.6"
   },
   "prettier": {
     "semi": false,
     "singleQuote": true
-  },
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": [
-      "ESNext"
-    ],
-    "moduleResolution": "Node",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": ".",
-    "allowJs": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "importHelpers": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": [
-      "node",
-      "ws"
-    ]
-  },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "lib": [
-    "ESNext"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  }
 }
