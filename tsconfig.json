@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+<<<<<<< HEAD
     "target": "ES6",
     "esModuleInterop": true,          // Target ECMAScript version
     "module": "commonjs",     // Module system
@@ -15,4 +16,25 @@
   "exclude": [
     "node_modules"            // Exclude node_modules
   ]
+=======
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "allowJs": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "ws"],
+    "lib": ["ESNext", "dom"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+>>>>>>> affb6518b9537b37b7d0d89f00c8ca74ef1efa66
 }
