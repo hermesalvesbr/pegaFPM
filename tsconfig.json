@@ -1,11 +1,18 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "strict": true,
-      "esModuleInterop": true
-    },
-    "include": ["*.ts"],
-    "exclude": ["node_modules"]
-  }
-  
+  "compilerOptions": {
+    "target": "ES6",
+    "esModuleInterop": true,          // Target ECMAScript version
+    "module": "commonjs",     // Module system
+    "outDir": "./dist",       // Output directory for compiled JavaScript
+    "rootDir": "./src",       // Root directory for TypeScript files
+    "strict": true,            // Enable strict type checking
+    "moduleResolution": "node",
+    "types": ["node"]
+  },
+  "include": [
+    "src/**/*.ts"             // Files to be compiled
+  ],
+  "exclude": [
+    "node_modules"            // Exclude node_modules
+  ]
+}
