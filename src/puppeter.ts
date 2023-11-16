@@ -1,11 +1,10 @@
 import puppeteer from 'puppeteer'
-import { launch } from 'puppeteer'
 const browser = await puppeteer.launch()
 const page = await browser.newPage()
 
 // Acessar o site do Tesouro Nacional
 await page.goto(
-  'https://www.tesourotransparente.gov.br/ckan/dataset/transferencias-constituci onais-para-municipios',
+  'https://www.tesourotransparente.gov.br/ckan/dataset/transferencias-constitucionais-para-municipios',
 )
 
 // Obter a lista de arquivos CSV
