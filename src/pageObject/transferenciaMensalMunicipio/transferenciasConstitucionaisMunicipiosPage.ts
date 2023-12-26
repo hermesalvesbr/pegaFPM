@@ -1,59 +1,80 @@
-import PuppeteerPageObjectBase from "../puppeteerPageObjectBase";
-import { Page } from 'puppeteer';
+import PuppeteerPageObjectBase from '../puppeteerPageObjectBase'
+import { Page } from 'puppeteer'
+import dotenv from 'dotenv'
+dotenv.config()
+export default class TransferenciasConstitucionaisMunicipiosPage extends PuppeteerPageObjectBase {
+  private TRANSFERENCIAS_URL: string = process.env.TRANSFERENCIAS_URL || ''
+  private readonly transferenciasConstitucionaisMunicipiosUrl: string =
+    this.TRANSFERENCIAS_URL
+  private readonly transferenciasMensalMunicipioFileSelector: string =
+    '.resource-item'
+  private readonly transferenciasMensalMunicipioDownloadFileSelector: string =
+    '.resource-url-analytics'
+  private readonly sizeFileRegexPatern = /([\d,.]+\sMiB)/i
+  private readonly onlyNumbersWithCommaRegexPatern = /([\d,]+)/
 
-export default class TransferenciasConstitucionaisMunicipiosPage extends PuppeteerPageObjectBase{
+  constructor(page: Page) {
+    super(page)
+  }
 
-    private readonly transferenciasConstitucionaisMunicipiosUrl: string = 'https://www.tesourotransparente.gov.br/ckan/dataset/transferencias-constitucionais-para-municipios';
-    private readonly transferenciasMensalMunicipioFileSelector: string = '.resource-item';
-    private readonly transferenciasMensalMunicipioDownloadFileSelector: string = '.resource-url-analytics';
-    private readonly sizeFileRegexPatern = /([\d,.]+\sMiB)/i;
-    private readonly onlyNumbersWithCommaRegexPatern = /([\d,]+)/;
+  public async openPage() {
+    await this.OpenPage(this.transferenciasConstitucionaisMunicipiosUrl)
+  }
 
-    constructor(page: Page){
-        super(page);
-    }
+  public async GetLinkTransferenciasMensalMunicipioFileByYearAndMonth(
+    yearMonth: string
+  ): Promise<string> {
+    const fileInfo = await this.getInformationFromFilesByYearAndMonth(yearMonth)
 
-    public async openPage(){
-        await this.OpenPage(this.transferenciasConstitucionaisMunicipiosUrl);
-    }
+    return fileInfo.downloadLink
+  }
 
-    public async GetLinkTransferenciasMensalMunicipioFileByYearAndMonth(yearMonth: string) : Promise<string> {
-        const fileInfo = await this.getInformationFromFilesByYearAndMonth(yearMonth);
+  public async getFileSizeByYearMonth(yearMonth: string): Promise<number> {
+    await this.Delay(3000)
 
-        return fileInfo.downloadLink;
-    }
+    const fileInfo = await this.getInformationFromFilesByYearAndMonth(yearMonth)
 
-    public async getFileSizeByYearMonth(yearMonth: string) : Promise<number> {
-        await this.Delay(3000);
+    const fileSizeWithUnitOfMeasurement = fileInfo.description.match(
+      this.sizeFileRegexPatern
+    )[0]
+    const fileSize = fileSizeWithUnitOfMeasurement
+      .match(this.onlyNumbersWithCommaRegexPatern)[0]
+      .replace(',', '.')
 
-        const fileInfo = await this.getInformationFromFilesByYearAndMonth(yearMonth); 
+    return Number(fileSize)
+  }
 
-        const fileSizeWithUnitOfMeasurement = fileInfo.description.match(this.sizeFileRegexPatern)[0];
-        const fileSize = fileSizeWithUnitOfMeasurement.match(this.onlyNumbersWithCommaRegexPatern)[0].replace(',', '.');
+  public async getInformationFromFilesByYearAndMonth(
+    fileName: string
+  ): Promise<any> {
+    await this.Delay(3000)
 
-        return Number(fileSize);
-    }
+    const elements = await this.GetElements(
+      this.transferenciasMensalMunicipioFileSelector
+    )
+    const filesInfo = await Promise.all(
+      elements.map(async element => {
+        return {
+          description: await element.$eval('a', element =>
+            element.textContent?.replace('\n', ' ').replace(/\s+/gi, ' ')
+          ),
+          downloadLink: await element.$eval(
+            this.transferenciasMensalMunicipioDownloadFileSelector,
+            element => element.getAttribute('href')
+          ),
+        }
+      })
+    )
 
-    public async getInformationFromFilesByYearAndMonth(fileName: string) : Promise<any> {
-        await this.Delay(3000);
+    const fileInfo = filesInfo.find(fileInfo =>
+      fileInfo.description?.toLowerCase().includes(fileName.toLowerCase())
+    )
 
-        const elements = await this.GetElements(this.transferenciasMensalMunicipioFileSelector);
-        const filesInfo = await Promise.all(elements.map(async (element) => {
-            return {
-                description: await element.$eval('a', (element) => element.textContent?.replace("\n", " ").replace(/\s+/gi, " ")),
-                downloadLink: await element.$eval(this.transferenciasMensalMunicipioDownloadFileSelector, element => element.getAttribute('href'))
-            }
-        }));
+    if (!fileInfo) throw new Error(`Não foi encontado o arquivo: ${fileName}.`)
 
-        const fileInfo = filesInfo.find(fileInfo => fileInfo.description?.toLowerCase().includes(fileName.toLowerCase()));
+    if (!fileInfo.downloadLink)
+      throw new Error(`O link do arquivo: ${fileName}, não esta disponivel.`)
 
-        if(!fileInfo)
-            throw new Error(`Não foi encontado o arquivo: ${fileName}.`);
-
-        if(!fileInfo.downloadLink)
-            throw new Error(`O link do arquivo: ${fileName}, não esta disponivel.`);
-
-        return fileInfo;
-    }
-
+    return fileInfo
+  }
 }
