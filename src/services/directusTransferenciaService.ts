@@ -4,6 +4,7 @@ import {
   DirectusClient,
   RestClient,
   authentication,
+  clearCache,
   createDirectus,
   createItem,
   deleteItems,
@@ -47,6 +48,7 @@ export default class DirectusTransferenciaService {
   }
 
   public async getItemsByFileName(fileName: string): Promise<any[]> {
+    const result = await this.client.request(clearCache())
     return await this.client.request(
       readItems(this.colletion, {
         filter: {
@@ -63,7 +65,6 @@ export default class DirectusTransferenciaService {
     currentFileSize: number
   ): Promise<boolean> {
     const previousFile = await this.getItemsByFileName(fileName)
-
     if (
       (previousFile.length == 0 && currentFileSize > 0) ||
       currentFileSize > previousFile[0].tamanho
