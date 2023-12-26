@@ -1,0 +1,2 @@
+# Instruções de uso do WebScraping
+- Dentro da pasta 'src/scheduleservices' se entra um arquivo chamado 'transferenciaMensalMunicipiosService.ts', que possui a classe responsável pela execução do scraping. O metódo que inicia o processo é o 'startProcess', ele é um metódo async, e espera como parametro o 'year', do tipo string e do seguinte formato ('YYYY', ex: 2023), e o mês, do tipo string e do seguinte formato ('MM', ex: 11). 

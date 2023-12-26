@@ -5,15 +5,13 @@ import DirectusTransferenciaService from "../services/directusTransferenciaServi
 import DownloadService from "../services/downloadServie";
 import MapperService from "../services/mapperService";
 import puppeteer from "puppeteer";
-import TransferenciaConstitucionalService from "../services/transferenciaConstitucionalService";
 
-export default class TransferenciaMensalMuniciosService {
+export default class TransferenciaMensalMunicipiosService {
     public async startProcess(year: string, month: string): Promise<void> {
         const downloadService = new DownloadService();
         const csvService = new CsvService();
         const mapService = new MapperService();
         const directusTransferenciaMensalMunicipiosService = new DirectusTransferenciaMensalMunicipiosService();
-        const transferenciaConstitucionalService = new TransferenciaConstitucionalService()
         const directusTransferenciaService = new DirectusTransferenciaService();
         const fileNamePrefix = 'Transferencia_Mensal_Municipios_@';
         const yearMonth = `${year}${month}`;
