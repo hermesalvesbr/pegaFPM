@@ -48,7 +48,11 @@ export default class DirectusTransferenciaService {
   }
 
   public async getItemsByFileName(fileName: string): Promise<any[]> {
-    const result = await this.client.request(clearCache())
+    try {
+      await this.client.request(clearCache())
+    } catch (error: any) {
+      console.log('Limpar cache', error?.message)
+    }
     return await this.client.request(
       readItems(this.colletion, {
         filter: {

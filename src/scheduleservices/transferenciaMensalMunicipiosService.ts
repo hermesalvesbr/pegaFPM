@@ -18,7 +18,7 @@ export default class TransferenciaMensalMunicipiosService {
     const yearMonth = `${year}${month}`
     const fileName = fileNamePrefix.replace('@', `${yearMonth}`)
 
-    const browser = await puppeteer.launch({ headless: true })
+    const browser = await puppeteer.launch({ headless: 'new' })
     const page = await browser.newPage()
     const transferenciasConstitucionaisMunicipiosPage =
       new TransferenciasConstitucionaisMunicipiosPage(page)
